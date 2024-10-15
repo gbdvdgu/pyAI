@@ -117,6 +117,9 @@ Once the voice assistant is running, you can use the following commands:
 | `hello`                   | Greets the user.                     |
 | `exit`                    | Closes the voice assistant.          |
 
+# What Problems I Am Solving Right Now In This
+1. News fucntion not working properly
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
