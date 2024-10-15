@@ -115,14 +115,14 @@ def note(text):
     subprocess.Popen(["notepad.exe", filename])
 
 def temp():
-    key = 'bd5e378503939ddaee76f12ad7a97608'  # Your OpenWeatherMap API key
+    key = 'bd5e378503939ddaee76f12ad7a97608' 
     city = 'Delhi'
     api_address = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={key}'
     
     try:
         json_data = requests.get(api_address).json()
         if 'main' in json_data:
-            temperature = round(json_data["main"]["temp"] - 273.15, 1)  # Convert Kelvin to Celsius
+            temperature = round(json_data["main"]["temp"] - 273.15, 1)  
             return temperature
         else:
             print(f"Error fetching temperature data: {json_data}")
@@ -132,7 +132,7 @@ def temp():
         return "N/A"
 
 def des():
-    key = 'bd5e378503939ddaee76f12ad7a97608'  # Your OpenWeatherMap API key
+    key = 'bd5e378503939ddaee76f12ad7a97608' 
     city = 'Delhi'
     api_address = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={key}'
     
@@ -292,7 +292,7 @@ def run_zira():
 
         elif 'what is' in command:
             talk("What would you like to search for on Wikipedia?")
-            search_wiki = input("Enter your search query for Wikipedia: ")  # Take manual input from the terminal
+            search_wiki = input("Enter your search query for Wikipedia: ") 
             try:
                 info = wikipedia.summary(search_wiki, 1)
                 talk('According to Wikipedia:')
