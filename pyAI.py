@@ -15,6 +15,9 @@ import pyjokes
 from datetime import timedelta
 from time import sleep
 
+red = '\033[91m'
+green = '\033[92m'
+reset = '\033[0m'
 
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
@@ -28,6 +31,21 @@ def talk(text):
 
 
 def wish_me():
+    print(rf'''{red}
+                      /$$$$$$  /$$$$$$      
+                     /$$__  $$|_  $$_/      
+  /$$$$$$  /$$   /$$| $$  \ $$  | $$        
+ /$$__  $$| $$  | $$| $$$$$$$$  | $$        
+| $$  \ $$| $$  | $$| $$__  $$  | $$        
+| $$  | $$| $$  | $$| $$  | $$  | $$        
+| $$$$$$$/|  $$$$$$$| $$  | $$ /$$$$$$      
+| $$____/  \____  $$|__/  |__/|______/      
+| $$       /$$  | $$                        
+| $$      |  $$$$$$/                        
+|__/       \______/                                  
+                                       {green}GitHub: gbdvdgu
+                                       MadeBy: Harsh Pratap Singh
+{reset}''')
     hour = int(datetime.datetime.now().hour)
     if hour < 12:
         talk('Good Morning')
