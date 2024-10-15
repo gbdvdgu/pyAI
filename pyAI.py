@@ -24,11 +24,9 @@ voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[1].id)
 engine.setProperty('rate', 150)
 
-
 def talk(text):
     engine.say(text)
     engine.runAndWait()
-
 
 def wish_me():
     print(rf'''{red}
@@ -56,7 +54,6 @@ def wish_me():
 
     talk('Myself Zira, How can I help you sir!')
 
-
 def take_command():
     command = ""
     try:
@@ -76,7 +73,6 @@ def take_command():
         print("Could not request results from the speech recognition service.")
     return command.strip()
 
-
 def say_hello(text):
     greet = ["hi", "hello", "hey there"]
     responses = ["hi", "hello", "what's up", "hey there", "greetings!"]
@@ -84,7 +80,6 @@ def say_hello(text):
         response = random.choice(responses)
         print(response)
         talk(response)
-
 
 def calculate():
     talk("Please select any of the following operations: +, -, *, /, **")
@@ -111,7 +106,6 @@ def calculate():
     print(f'Result: {result}')
     talk(f'The result is {result}')
 
-
 def note(text):
     date = datetime.datetime.now()
     filename = str(date).replace(":", "-") + "-note.txt"
@@ -120,70 +114,84 @@ def note(text):
 
     subprocess.Popen(["notepad.exe", filename])
 
-
 def temp():
-    key = 'your_api_key'
-    api_address = f'http://api.openweathermap.org/data/2.5/weather?q=Delhi&appid={key}'
-    json_data = requests.get(api_address).json()
-
-    if 'main' in json_data:
-        temperature = round(json_data["main"]["temp"] - 273.15, 1)
-        return temperature
-    else:
+    key = 'bd5e378503939ddaee76f12ad7a97608'  # Your OpenWeatherMap API key
+    city = 'Delhi'
+    api_address = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={key}'
+    
+    try:
+        json_data = requests.get(api_address).json()
+        if 'main' in json_data:
+            temperature = round(json_data["main"]["temp"] - 273.15, 1)  # Convert Kelvin to Celsius
+            return temperature
+        else:
+            print(f"Error fetching temperature data: {json_data}")
+            return "N/A"
+    except requests.exceptions.RequestException as e:
+        print(f"API request error: {e}")
         return "N/A"
-
 
 def des():
-    key = 'your_api_key'
-    api_address = f'http://api.openweathermap.org/data/2.5/weather?q=Delhi&appid={key}'
-    json_data = requests.get(api_address).json()
-
-    if 'weather' in json_data:
-        description = json_data["weather"][0]["description"]
-        return description
-    else:
+    key = 'bd5e378503939ddaee76f12ad7a97608'  # Your OpenWeatherMap API key
+    city = 'Delhi'
+    api_address = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={key}'
+    
+    try:
+        json_data = requests.get(api_address).json()
+        if 'weather' in json_data:
+            description = json_data["weather"][0]["description"]
+            return description
+        else:
+            print(f"Error fetching weather description: {json_data}")
+            return "N/A"
+    except requests.exceptions.RequestException as e:
+        print(f"API request error: {e}")
         return "N/A"
-
 
 def tell_joke():
     joke = pyjokes.get_joke()
     print(joke)
     talk(joke)
 
-
 def get_news():
-    news_api_key = 'your_news_api_key'
+    news_api_key = 'pub_56303b52988c0eccb2680e15a4188c92baea2'
     url = f'https://newsapi.org/v2/top-headlines?country=in&apiKey={news_api_key}'
-    news = requests.get(url).json()
-    articles = news['articles'][:5]
-    for article in articles:
-        print(article['title'])
-        talk(article['title'])
+    response = requests.get(url)
+    if response.status_code == 200:
+        news = response.json()
+        if 'articles' in news and len(news['articles']) > 0:
+            articles = news['articles'][:5]
+            for article in articles:
+                print(article['title'])
+                talk(article['title'])
+        else:
+            talk("No news articles found.")
+            print("No articles found.")
+    else:
+        talk("Failed to retrieve news.")
+        print(f"Error: {response.status_code}")
 
-
-def set_alarm(time_str):
-    talk(f'Setting an alarm for {time_str}')
-    alarm_time = datetime.datetime.strptime(time_str, "%H:%M")
-    while True:
-        if datetime.datetime.now().hour == alarm_time.hour and datetime.datetime.now().minute == alarm_time.minute:
-            talk("It's time for your alarm!")
-            break
-        time.sleep(10)  
-
-
-def set_timer(seconds):
-    talk(f"Setting timer for {seconds} seconds")
-    sleep(seconds)
-    talk("Time's up!")
-
+def set_alarm():
+    talk("Please enter the alarm time in the format HH:MM")
+    alarm_time_str = input("Enter the alarm time (HH:MM): ")
+    try:
+        alarm_time = datetime.datetime.strptime(alarm_time_str, "%H:%M")
+        talk(f'Setting an alarm for {alarm_time_str}')
+        
+        while True:
+            if datetime.datetime.now().hour == alarm_time.hour and datetime.datetime.now().minute == alarm_time.minute:
+                talk("It's time for your alarm!")
+                break
+            time.sleep(10)
+    except ValueError:
+        talk("Invalid time format. Please try again.")
 
 def play_playlist():
-    playlist = ['song1', 'song2', 'song3']  # replace with your playlist
+    playlist = ['arcade', 'infected', 'Harleys In Hawaii']  # replace with your playlist
     talk("Playing your favorite playlist")
     for song in playlist:
         pywhatkit.playonyt(song)
-        sleep(2)  
-
+        sleep(2)
 
 def system_info():
     battery = psutil.sensors_battery()
@@ -191,24 +199,28 @@ def system_info():
     cpu_usage = psutil.cpu_percent(1)
     talk(f"Your system has {battery_percent}% battery remaining and the CPU usage is {cpu_usage} percent")
 
-
 def guessing_game():
     number = random.randint(1, 10)
     attempts = 0
     while attempts < 3:
         talk("Guess a number between 1 and 10")
-        guess = int(take_command())
-        attempts += 1
-        if guess == number:
-            talk(f"Congratulations! You guessed it in {attempts} attempts")
-            break
-        elif guess > number:
-            talk("Try a lower number")
-        else:
-            talk("Try a higher number")
-    if attempts == 3:
-        talk(f"Sorry, the number was {number}")
+        
+        try:
+            guess = int(input("Enter your guess: "))
+            attempts += 1
 
+            if guess == number:
+                talk(f"Congratulations! You guessed it in {attempts} attempts")
+                break
+            elif guess > number:
+                talk("Try a lower number")
+            else:
+                talk("Try a higher number")
+        except ValueError:
+            talk("That's not a valid number. Please enter a number between 1 and 10.")
+
+    if attempts == 3 and guess != number:
+        talk(f"Sorry, the correct number was {number}")
 
 def run_zira():
     wish_me()
@@ -224,14 +236,14 @@ def run_zira():
             pywhatkit.playonyt(song)
 
         elif 'time' in command:
-            time = datetime.datetime.now().strftime('%I:%M %p')
-            talk(f'The current time is {time}')
-            print(time)
+            current_time = datetime.datetime.now().strftime('%I:%M %p')
+            talk(f'The current time is {current_time}')
+            print(current_time)
 
         elif 'date' in command:
-            date = datetime.datetime.now().strftime('%D / %M / %Y')
-            talk(f'Today\'s date is: {date}')
-            print("Today's date is: ", date)
+            current_date = datetime.datetime.now().strftime('%D / %M / %Y')
+            talk(f'Today\'s date is: {current_date}')
+            print("Today's date is: ", current_date)
 
         elif 'temperature' in command or 'weather' in command:
             current_temp = temp()
@@ -243,35 +255,11 @@ def run_zira():
         elif 'calculate' in command:
             calculate()
 
-        elif 'what is' in command:
-            search_wiki = command.replace('what is', '').strip()
-            info = wikipedia.summary(search_wiki, 1)
-            talk('According to Wikipedia')
-            print(info)
-            talk(info)
-
-        elif 'fact' in command:
-            x = randfacts.get_fact()
-            talk(f"Did you know that, {x}")
-
         elif 'note' in command:
-            talk("Sure sir, what would you like me to write down?")
+            talk('What should I note down?')
             note_text = take_command()
             note(note_text)
-            talk("I have made the note successfully.")
-
-        elif 'thank you' in command:
-            thank_u_list = ['Always welcome', 'You are welcome sir', 'Any time']
-            thanking = random.choice(thank_u_list)
-            talk(thanking)
-
-        elif 'open youtube' in command:
-            talk("Opening YouTube")
-            webbrowser.open("youtube.com")
-
-        elif 'open google' in command:
-            talk("Opening Google")
-            webbrowser.open("google.com")
+            talk('Noted!')
 
         elif 'joke' in command:
             tell_joke()
@@ -279,40 +267,42 @@ def run_zira():
         elif 'news' in command:
             get_news()
 
-        elif 'alarm' in command:
-            talk("Tell me the time to set the alarm in HH:MM format")
-            alarm_time = take_command()
-            set_alarm(alarm_time)
+        elif 'set alarm' in command:
+            set_alarm()
 
-        elif 'reminder' in command:
-            talk("What should I remind you about?")
-            reminder_text = take_command()
-            talk("When should I remind you?")
-            reminder_time = take_command()
-            set_alarm(reminder_time)
-            talk(f"Reminder set for {reminder_time}: {reminder_text}")
-
-        elif 'playlist' in command:
+        elif 'play every songs' in command:
             play_playlist()
 
         elif 'system info' in command:
             system_info()
 
-        elif 'game' in command:
+        elif 'guessing game' in command:
             guessing_game()
+        
+        elif 'thanks zira' in command:
+            thank_u_list = ['Always welcome', 'You are welcome sir', 'Any time']
+            thanking = random.choice(thank_u_list)
+            print(thanking)  
+            talk(thanking)
 
-        elif 'timer' in command:
-            talk("How many seconds?")
-            seconds = int(take_command())
-            set_timer(seconds)
 
-        elif 'exit' in command:
-            talk("Are you sure you want to exit?")
-            confirmation = take_command()
-            if 'yes' in confirmation or 'sure' in confirmation:
-                talk("Goodbye!")
-                break
-            else:
-                talk("Resuming assistant")
+        elif 'goodbye' in command or 'exit' in command:
+            talk('Goodbye! Have a nice day!')
+            break
+
+        elif 'what is' in command:
+            talk("What would you like to search for on Wikipedia?")
+            search_wiki = input("Enter your search query for Wikipedia: ")  # Take manual input from the terminal
+            try:
+                info = wikipedia.summary(search_wiki, 1)
+                talk('According to Wikipedia:')
+                print(info)
+                talk(info)
+            except wikipedia.exceptions.DisambiguationError as e:
+                talk("There are multiple results for your query. Please be more specific.")
+                print(e)
+            except Exception as e:
+                talk("I couldn't find any information on that.")
+                print(e)
 
 run_zira()
