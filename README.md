@@ -36,8 +36,8 @@ Before running the voice assistant, ensure you have the following packages insta
 
 1. **Clone the repository** (if applicable):
    ```bash
-   git clone <repository-url>
-   cd <repository-directory>
+   git clone https://github.com/gbdvdgu/pyAI
+   cd pyAI
    ```
 
 2. **Set up a virtual environment** (recommended):
