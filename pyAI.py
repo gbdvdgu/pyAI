@@ -154,7 +154,7 @@ def tell_joke():
     talk(joke)
 
 def get_news():
-    news_api_key = 'pub_56303b52988c0eccb2680e15a4188c92baea2'
+    news_api_key = '660fc606daac41c0b918d1cb1d2c25f0'
     url = f'https://newsapi.org/v2/top-headlines?country=in&apiKey={news_api_key}'
     response = requests.get(url)
     if response.status_code == 200:
