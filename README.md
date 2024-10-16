@@ -122,7 +122,7 @@ Once the voice assistant is running, you can use the following commands:
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU General Public License (GPL) - see the LICENSE file for details.
 
 ## Acknowledgements
 
